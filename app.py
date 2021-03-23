@@ -1,15 +1,42 @@
 from flask import Flask, Blueprint, flash, request, redirect, url_for, render_template, send_from_directory, jsonify, Response
-import json
+from pymongo import MongoClient
+import requests, time, json, threading
 
 with open('config.json') as config_file:
     config = json.load(config_file)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = config.get('SECRET_KEY')
+client = MongoClient('localhost', 27017)
+users = client.vaccineNotifier.users
+
+def zip_parser(zip_code):
+    r = requests.get(f'https://public.opendatasoft.com/api/records/1.0/search/?dataset=us-zip-code-latitude-and-longitude&q={zip_code}&facet=state&facet=timezone&facet=dst')
+    zip_dict = r.json()
+    coords = zip_dict["records"][0]["geometry"]["coordinates"]
+    state = zip_dict["records"][0]["fields"]["state"]
+    return coords, state
 
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    return render_template("home.html")
+    message=''
+    if request.method == 'POST':
+        email = request.form.get('email')  # access the data inside
+        zipcode = request.form.get('zipcode')
+        distance = int(request.form.get('distance'))
+        coords, state = zip_parser(zipcode)
+        print(email, zipcode, distance)
+        #check for valid details before submission
+          # unique email
+        new_user = {"email": email,
+                    "zipcode": zipcode,
+                    "distance": distance,
+                    "coords": coords,
+                    "state": state,
+                    "active": True }
+        user_id = users.insert_one(new_user).inserted_id
+        message='Registration success'
+    return render_template("home.html", message=message)
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

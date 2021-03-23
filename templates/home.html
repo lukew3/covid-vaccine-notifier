@@ -8,19 +8,24 @@
        in your range has an opening.</p>
 </header>
 <main>
-  <form>
+  <form action="" method="post">
     <label>Email: </label><br/>
-    <input type="text" id="email_input" name="email" placeholder="email"><br/>
+    <input type="text" id="email" name="email" placeholder="email"><br/>
     <label>Zip code: </label><br/>
-    <input type="text" id="zipcode_input" name="zipcode" placeholder="zip code"><br/>
+    <input type="text" id="zipcode" name="zipcode" placeholder="zip code"><br/>
     <label>Desired distance from zip (in miles): </label><br/>
-    <input type="number" id="distance_input" name="distance" placeholder="desired distance from zip (in miles)"><br/><br/>
+    <input type="number" id="distance" name="distance" placeholder="desired distance from zip (in miles)"><br/><br/>
     <input type="submit" value="Submit">
   </form>
+  {% if message %}
+        <p>{{ message }}</p>
+  {% endif %}
 </main>
 <footer>
   <p>
-    Created by <a href="https://lukew3.com">Luke Weiler</a> · <a href="https://github.com/lukew3">Github</a>
+    Created by <a href="https://lukew3.com">Luke Weiler</a> ·
+    <a href="https://github.com/lukew3/covid-vaccine-notifier">Github</a> ·
+    Powered by <a href="https://www.vaccinespotter.org/">Vaccinespotter.org</a>
   </p>
 </footer>
 {% endblock %}
