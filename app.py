@@ -1,6 +1,7 @@
 from flask import Flask, Blueprint, flash, request, redirect, url_for, render_template, send_from_directory, jsonify, Response
 from pymongo import MongoClient
 import requests, time, json, threading
+import re
 
 with open('config.json') as config_file:
     config = json.load(config_file)
@@ -17,6 +18,18 @@ def zip_parser(zip_code):
     state = zip_dict["records"][0]["fields"]["state"]
     return coords, state
 
+
+def check_input(email, zipcode):
+    email_regex = '^[a-z0-9]+[\._]?[a-z0-9]+[@]\w+[.]\w+$'
+    if not (re.search(email_regex,email)):
+        return "Invalid email"
+    zipcode_regex = '^\d{5}(?:[-\s]\d{4})?$'
+    if not (re.search(zipcode_regex, zipcode)):
+        return "Invalid zip code"
+    if users.find_one({"email": email}):
+        return "Duplicate email"
+    return "good"
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     message=''
@@ -24,10 +37,9 @@ def home():
         email = request.form.get('email')  # access the data inside
         zipcode = request.form.get('zipcode')
         distance = int(request.form.get('distance'))
+        if check_input(email, zipcode) != "good":
+            return render_template("home.html", message=check_input(email, zipcode))
         coords, state = zip_parser(zipcode)
-        print(email, zipcode, distance)
-        #check for valid details before submission
-          # unique email
         new_user = {"email": email,
                     "zipcode": zipcode,
                     "distance": distance,
