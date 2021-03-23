@@ -17,7 +17,7 @@ client = MongoClient('localhost', 27017)
 def main():
     while True:
         check_appointments()
-        time.sleep(60*5)
+        time.sleep(60) #every minute
 
 
 def check_appointments():
