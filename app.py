@@ -37,8 +37,9 @@ def home():
         email = request.form.get('email')  # access the data inside
         zipcode = request.form.get('zipcode')
         distance = int(request.form.get('distance'))
-        if check_input(email, zipcode) != "good":
-            return render_template("home.html", message=check_input(email, zipcode))
+        input_validity = check_input(email, zipcode)
+        if input_validity != "good":
+            return render_template("home.html", message=input_validity)
         coords, state = zip_parser(zipcode)
         new_user = {"email": email,
                     "zipcode": zipcode,
