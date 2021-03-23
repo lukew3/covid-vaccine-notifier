@@ -1,0 +1,15 @@
+* {
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+}
+
+body {
+  margin: 1rem auto;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  max-width: 450px;
+}
+
+input {
+  width: 80%;
+}

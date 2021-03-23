@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<header>
+    <h1>Covid Vaccine Notifer</h1>
+    <p>Get an email when a vaccine is available near you. Status of pharmacies
+       is checked every 5 minutes. You will receive an email if a location
+       in your range has an opening.</p>
+</header>
+<main>
+  <form>
+    <label>Email: </label><br/>
+    <input type="text" id="email_input" name="email" placeholder="email"><br/>
+    <label>Zip code: </label><br/>
+    <input type="text" id="zipcode_input" name="zipcode" placeholder="zip code"><br/>
+    <label>Desired distance from zip (in miles): </label><br/>
+    <input type="number" id="distance_input" name="distance" placeholder="desired distance from zip (in miles)"><br/><br/>
+    <input type="submit" value="Submit">
+  </form>
+</main>
+<footer>
+  <p>
+    Created by <a href="https://lukew3.com">Luke Weiler</a> · <a href="https://github.com/lukew3">Github</a>
+  </p>
+</footer>
+{% endblock %}
